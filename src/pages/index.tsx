@@ -9,7 +9,7 @@ import { orderBy } from "lodash";
 const sortBy = ["Year Desc", "Year Asc", "Title Asc", "Title Desc", "Rating Desc", "Rating Asc"];
 
 const Home = ({ movies }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const [sortedMovies, setSortedMovies] = useState<Movie[]>(movies);
+  const [sortedMovies, setSortedMovies] = useState<Movie[]>(movies as Movie[]);
 
   const handleSortBy = (sortValue: string) => {
     
@@ -33,7 +33,7 @@ const Home = ({ movies }: InferGetServerSidePropsType<typeof getServerSideProps>
         setSortedMovies(orderBy(sortedMovies, "rating", "asc"))
         break;
       default:
-        setSortedMovies(movies);
+        setSortedMovies(movies as Movie[]);
     }
 
   }
