@@ -1,0 +1,60 @@
+body {
+  background-color: #f1f1f1;
+}
+
+.container {
+  max-width: 200rem;
+  margin: 0 auto;
+
+  .select-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    select {
+      border-color: #f7f7f7;
+      padding: 0.3rem;
+      margin-left: 0.5rem;
+    }
+  }
+
+  .no-results {
+    text-align: center;
+    margin: 1rem;
+  }
+  .movies {
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    width: 95%;
+
+    .movie-item {
+      width: 18.8%;
+      background-color: #fff;
+      box-shadow: 2px 2px 2px #f9f9f9;
+      margin: 1rem 0.5rem;
+      display: flex;
+      border-radius: 0.5rem;
+      color: #333;
+      text-decoration: none;
+      cursor: pointer;
+
+      @media (max-width: 500px) {
+        width: 100%;
+      }
+
+      span {
+        flex: 1;
+      }
+
+      .content {
+        flex: 1;
+        padding-left: 0.5rem;
+
+        p {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}
