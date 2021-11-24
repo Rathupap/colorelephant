@@ -1,5 +1,7 @@
-import { ChangeEvent, EventHandler, useState } from "react";
-import { InferGetServerSidePropsType } from "next";
+import { ChangeEvent, useState } from "react";
+import cookies from "next-cookies";
+import JSCookies from "js-cookie";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { Movie } from "types";
 import MovieItem from "components/MovieItem";
 import { orderBy } from "lodash";
@@ -39,6 +41,23 @@ const Home = ({ movies }: InferGetServerSidePropsType<typeof getServerSideProps>
   const handleOnFilterChange = (e: ChangeEvent<HTMLSelectElement>) => {
     handleSortBy(e.target.value);
   }
+
+  const handleLikeMovie = (movieId: number) => {
+    const updatedMovies = sortedMovies.map((movie) => {
+      if(movieId === movie.id) {
+        return {
+          ...movie,
+          liked: !movie.liked
+        }
+      }
+      return movie
+    });
+    setSortedMovies(updatedMovies);
+    JSCookies.set("movies", JSON.stringify(updatedMovies), {
+      expires: new Date("2040-10-03").getTime()
+    });
+  }
+
   return (
     <div className="container">
       <div className="select-wrapper">
@@ -57,7 +76,7 @@ const Home = ({ movies }: InferGetServerSidePropsType<typeof getServerSideProps>
         <div className="movies">
           {
             sortedMovies.map((movie) => (
-              <MovieItem movie={movie} key={movie.id} />
+              <MovieItem movie={movie} key={movie.id} onLikeMovie={handleLikeMovie} />
             ))
           }
         </div>
@@ -68,20 +87,31 @@ const Home = ({ movies }: InferGetServerSidePropsType<typeof getServerSideProps>
   );
 }
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  
+  const { movies } = cookies(ctx);
+
+  if(movies) {
+    return {
+      props: {
+        movies
+      }
+    }
+  }
 
   try {
     const data = await (await fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.NEXT_PUBLIC_API_KEY}`)).json();
-    const movies: Movie[] = data.results.map((result: any) => ({
+    const moviesData: Movie[] = data.results.map((result: any) => ({
       id: result.id,
       title: result.title,
       image: `https://image.tmdb.org/t/p/w200${result.poster_path}`,
       rating: result.vote_average,
-      year: new Date(result.release_date).getFullYear()
+      year: new Date(result.release_date).getFullYear(),
+      liked: false
     }));
     return {
       props: {
-        movies
+        movies: moviesData
       }
     }
   }

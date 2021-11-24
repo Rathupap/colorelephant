@@ -38,18 +38,43 @@ body {
       color: #333;
       text-decoration: none;
       cursor: pointer;
+      align-items: center;
+
+      &.liked {
+        background-color: #0d253f;
+        color: #fff;
+      }
 
       @media (max-width: 500px) {
         width: 100%;
       }
 
-      span {
+      a {
         flex: 1;
+
+        img {
+          border-radius: 0.3rem;
+        }
       }
 
       .content {
         flex: 1;
         padding-left: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .icon-container {
+          align-self: flex-end;
+          padding-right: 0.3rem;
+          padding-bottom: 0.3rem;
+          cursor: pointer;
+
+          svg {
+            position: relative;
+            z-index: 1000;
+          }
+        }
 
         p {
           font-size: 0.8rem;

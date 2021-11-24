@@ -4,6 +4,7 @@ interface Movie {
   image: string;
   rating: number;
   year: number;
+  liked: boolean;
 }
 
 export default Movie;

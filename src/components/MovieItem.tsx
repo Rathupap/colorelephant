@@ -1,27 +1,39 @@
 import Image from "next/image";
 import { Movie } from "types";
+import { FaStar } from "react-icons/fa";
 
 interface MovieItemProps {
     movie: Movie;
+    onLikeMovie: (movieId: number) => void;
 }
 
-const MovieItem = ({ movie }: MovieItemProps) => {
-    const { id, title, image, rating, year } = movie;
+const MovieItem = ({ movie, onLikeMovie }: MovieItemProps) => {
+    const { id, title, image, rating, year, liked } = movie;
+    const handleLike = () => {
+        onLikeMovie(id);
+    }
     return (
-        <a className="movie-item" href={`https://www.themoviedb.org/movie/${id}`} target="_blank" rel="noreferrer">
-            <Image 
-                src={image} 
-                title={title} 
-                alt={`${title} cover`}
-                height={250}
-                width={200}
-            />
+        <div className={`movie-item ${liked && "liked"}`}>
+            <a  href={`https://www.themoviedb.org/movie/${id}`} target="_blank" rel="noreferrer">
+                <Image 
+                    src={image} 
+                    title={title} 
+                    alt={`${title} cover`}
+                    height={250}
+                    width={200}
+                />
+            </a>
             <div className="content">
-                <p>Title: {title}</p>
-                <p>Rating: {rating}</p>
-                <p>Year: {year}</p>
+                <div>
+                    <p>Title: {title}</p>
+                    <p>Rating: {rating}</p>
+                    <p>Year: {year}</p>
+                </div>
+                <div className="icon-container">
+                    <FaStar onClick={handleLike} />
+                </div>
             </div>
-        </a>
+        </div>
     )
 }
 
